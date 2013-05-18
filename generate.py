@@ -34,34 +34,30 @@ def create_app_files(app_name):
 	os.system('git init')
 	os.system('touch README.md')
 
-	with open('.gitignore', 'w') as f:
-		f.write(render_filedata('gitignore'))
+	with open('.gitignore', 'w') as f: f.write(render_filedata('gitignore'))
 
 	#----------------------------------------
 	# heroku files
 	#----------------------------------------
-	with open('Procfile', 'w') as f:
-		f.write(render_filedata('procfile'))
+	with open('Procfile', 'w') as f: f.write(render_filedata('procfile'))
 
 	#----------------------------------------
 	# python files
 	#----------------------------------------
-	with open('app.py', 'w') as f:
-		f.write(render_filedata('main_app'))
+	with open('app.py', 'w') as f: f.write(render_filedata('main_app'))
+
+        with open('requirements.txt', 'w') as f: f.write(render_filedata('requirements'))
 
 	#----------------------------------------
 	# templates
 	#----------------------------------------
 	os.mkdir('templates')
 
-	with open('templates/base.html', 'w') as f:
-		f.write(render_filedata('base_template', app_name=app_name))
+	with open('templates/base.html', 'w') as f: f.write(render_filedata('base_template', app_name=app_name))
 
-	with open('templates/index.html', 'w') as f:
-		f.write(render_filedata('index_template', app_name=app_name))
+	with open('templates/index.html', 'w') as f: f.write(render_filedata('index_template', app_name=app_name))
 
-	with open('templates/404.html', 'w') as f:
-		f.write(render_filedata('404_template'))
+	with open('templates/404.html', 'w') as f: f.write(render_filedata('404_template'))
 
 	#----------------------------------------
 	# static files
@@ -93,7 +89,9 @@ def configure_virtualenvwrapper(app_name, virtualenvwrapper_path):
 	os.system('source ' + virtualenvwrapper_path + '; mkvirtualenv ' + app_name + '; workon ' + app_name + '; pip install Flask; pip freeze > requirements.txt')
 
 def configure_virtualenv(app_name):
-	os.system('virtualenv venv --distribute; source venv/bin/activate; pip install Flask; pip freeze > requirements.txt')
+	#os.system('virtualenv venv --distribute; source venv/bin/activate; pip install Flask; pip freeze > requirements.txt')
+	os.system('virtualenv venv --distribute; source venv/bin/activate; pip install -r requirements.txt')
+
 
 def main():
 	#----------------------------------------
@@ -157,8 +155,31 @@ def main():
 def render_filedata(filename, **kwargs):
 	if filename == 'gitignore':
 		return """*.pyc\nvenv\n*~\n.DS_Store\nignore"""
-	elif filename == 'procfile':
-		return """web: python app.py"""
+        elif filename == 'procfile':
+                return """web: python app.py"""
+        elif filename == 'requirements':
+                return """Flask
+Flask-Admin
+Flask-Cache
+Flask-FlatPages
+Flask-Gravatar
+Flask-Login
+Flask-Mail
+Flask-Restless
+Flask-SQLAlchemy
+Flask-Themes
+Flask-Uploads
+Flask-WTF
+Jinja2
+Markdown
+PyYAML
+SQLAlchemy
+WTForms
+Werkzeug
+argparse
+blinker
+python-dateutil
+wsgiref"""
 	elif filename == 'main_app':
 		return """import os
 from flask import Flask, render_template, send_from_directory, Response, url_for, request
