@@ -2,12 +2,20 @@ import os
 import binascii
 import argparse
 
+
+## Commands
+curl_cmd = 'curl --progress '
+
 favicon_url = 'http://twitter.github.io/bootstrap/assets/ico/favicon.png'
-jquery_url = 'http://code.jquery.com/jquery-1.8.3.js'
-jquerymin_url = 'http://code.jquery.com/jquery-1.8.3.min.js'
+jquery_url = 'http://code.jquery.com/jquery-1.9.1.js'
+jquerymin_url = 'http://code.jquery.com/jquery-1.9.1.min.js'
 bootstrapjs_url = 'http://twitter.github.io/bootstrap/assets/js/bootstrap.js'
 bootstrapjsmin_url = 'http://twitter.github.io/bootstrap/assets/js/bootstrap.min.js'
 bootstrapcss_url = 'http://twitter.github.io/bootstrap/assets/css/bootstrap.css'
+bootstrapimg0_url = 'http://twitter.github.io/bootstrap/assets/img/glyphicons-halflings-white.png'
+bootstrapimg1_url = 'http://twitter.github.io/bootstrap/assets/img/glyphicons-halflings.png'
+
+
 
 def git_add_and_commit(message):
 	os.system('git add .')
@@ -64,12 +72,15 @@ def create_app_files(app_name):
 	os.makedirs('static/img')
 	os.makedirs('static/ico')
 
-	os.system('curl ' + bootstrapcss_url + ' > static/css/bootstrap.css')
-	os.system('curl ' + bootstrapjs_url + ' > static/js/bootstrap.js')
-	os.system('curl ' + bootstrapjsmin_url + ' > static/js/bootstrap.min.js')
-	os.system('curl ' + jquery_url + ' > static/js/jquery.js')
-	os.system('curl ' + jquerymin_url + ' > static/js/jquery.min.js')
-	os.system('curl ' + favicon_url + ' > static/ico/favicon.ico')
+	os.system(curl_cmd + bootstrapcss_url + ' > static/css/bootstrap.css')
+	os.system(curl_cmd + bootstrapjs_url + ' > static/js/bootstrap.js')
+	os.system(curl_cmd + bootstrapjsmin_url + ' > static/js/bootstrap.min.js')
+	os.system(curl_cmd + bootstrapimg0_url + ' > static/img/glyphicons-halflings-white.png')
+	os.system(curl_cmd + bootstrapimg1_url + ' > static/img/glyphicons-halflings.png')
+	os.system(curl_cmd + jquery_url + ' > static/js/jquery.js')
+	os.system(curl_cmd + jquerymin_url + ' > static/js/jquery.min.js')
+	os.system(curl_cmd + favicon_url + ' > static/ico/favicon.ico')
+
 
 def configure_github(github_user, github_repo):
 	os.system('git remote add origin https://github.com/' + github_user + '/' + github_repo + '.git')
@@ -79,10 +90,10 @@ def configure_heroku(heroku_app):
 	os.system('heroku apps:rename ' + heroku_app)
 
 def configure_virtualenvwrapper(app_name, virtualenvwrapper_path):
-	os.system('source ' + virtualenvwrapper_path + '; mkvirtualenv ' + app_name + '; workon ' + app_name + '; sudo pip install Flask; pip freeze > requirements.txt')
+	os.system('source ' + virtualenvwrapper_path + '; mkvirtualenv ' + app_name + '; workon ' + app_name + '; pip install Flask; pip freeze > requirements.txt')
 
 def configure_virtualenv(app_name):
-	os.system('virtualenv venv --distribute; source venv/bin/activate; sudo pip install Flask; pip freeze > requirements.txt')
+	os.system('virtualenv venv --distribute; source venv/bin/activate; pip install Flask; pip freeze > requirements.txt')
 
 def main():
 	#----------------------------------------

@@ -5,6 +5,8 @@
 + python
 + pip
 + git
++ gcc
++ make
 
 ## Optional packages
 
